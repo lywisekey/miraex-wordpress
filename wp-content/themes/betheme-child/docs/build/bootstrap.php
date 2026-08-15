@@ -36,6 +36,22 @@ if ( ! $root || ! file_exists( rtrim( $root, '/' ) . '/wp-load.php' ) ) {
 	exit( 1 );
 }
 
+/**
+ * Force the direct filesystem before WordPress loads.
+ *
+ * Saving a post makes LiteSpeed purge, which makes Rank Math clear its sitemap cache,
+ * which goes through WP_Filesystem. With no FTP credentials on the command line that
+ * lands in the FTP driver and throws a TypeError, killing the script mid-save — after
+ * the post row is updated and before the builder data is written.
+ *
+ * This has to be a constant defined ahead of the load, not a `filesystem_method` filter
+ * added afterwards: by the time a filter could be registered, the plugins have already
+ * run and the first call is on its way.
+ */
+if ( ! defined( 'FS_METHOD' ) ) {
+	define( 'FS_METHOD', 'direct' );
+}
+
 require rtrim( $root, '/' ) . '/wp-load.php';
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,6 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once ABSPATH . 'wp-admin/includes/post.php';
+
 
 /* every builder writes as the site owner */
 wp_set_current_user( 1 );

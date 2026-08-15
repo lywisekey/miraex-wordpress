@@ -63,9 +63,14 @@ $sections = [];
  *
  *     440 + 250 + 180 + 230 = 1100   +   3 gaps x 40px = 120   =   1220px
  *
- * which is exactly the container. The original 400/250/250/250 came to 1270 — 50px over,
- * which is what pushed the last column onto its own line. Change one width and another
- * has to give the space back.
+ * which is exactly the container — the original 400/250/250/250 came to 1270, 50px over,
+ * and that is what pushed the last column onto its own line.
+ *
+ * The widths are written as a share of the space left after the gaps rather than as those
+ * pixel values, because the gaps do not shrink: at any container under 1220px the fixed
+ * columns plus 120px of gap no longer fit and the row breaks again. Subtracting the gaps
+ * first keeps the proportions 440:250:180:230 at every width — identical at 1220, and
+ * still one row at 1100 or 1000. The ratios are out of 1100, not 1220.
  */
 
 $sections[] = section( 'ftr-grid', 'Footer — links', [
@@ -86,7 +91,7 @@ $sections[] = section( 'ftr-grid', 'Footer — links', [
 	'css_advanced_gap'              => css( SECW, 'column-gap', '40px' ),
 ], [
 	wrap( 'ftr-about', 'About', '2/5', [
-		'css_advanced_flex' => css( WRP, 'width', [ 'desktop' => '440px', 'tablet' => '100%', 'mobile' => '100%' ] ),
+		'css_advanced_flex' => css( WRP, 'width', [ 'desktop' => 'calc((100% - 120px) * 0.4)', 'tablet' => '100%', 'mobile' => '100%' ] ),
 	], [
 		item( 'ftr-logo', 'image', 'Miraex logo', '1/1', [
 			'src'       => $logo['url'],
@@ -124,7 +129,7 @@ $sections[] = section( 'ftr-grid', 'Footer — links', [
 	], '1/1', '1/1' ),
 
 	wrap( 'ftr-col-solutions', 'Solutions', '1/5', [
-		'css_advanced_flex' => css( WRP, 'width', [ 'desktop' => '250px', 'tablet' => '100%', 'mobile' => '100%' ] ),
+		'css_advanced_flex' => css( WRP, 'width', [ 'desktop' => 'calc((100% - 120px) * 0.227273)', 'tablet' => '100%', 'mobile' => '100%' ] ),
 	], [
 		ftr_heading( 'ftr-h-solutions', 'Solutions' ),
 		ftr_links( 'ftr-l-solutions', [
@@ -136,7 +141,7 @@ $sections[] = section( 'ftr-grid', 'Footer — links', [
 	], '1/3', '1/1' ),
 
 	wrap( 'ftr-col-company', 'Company', '1/5', [
-		'css_advanced_flex' => css( WRP, 'width', [ 'desktop' => '180px', 'tablet' => '100%', 'mobile' => '100%' ] ),
+		'css_advanced_flex' => css( WRP, 'width', [ 'desktop' => 'calc((100% - 120px) * 0.163636)', 'tablet' => '100%', 'mobile' => '100%' ] ),
 	], [
 		ftr_heading( 'ftr-h-company', 'Company' ),
 		ftr_links( 'ftr-l-company', [
@@ -149,7 +154,7 @@ $sections[] = section( 'ftr-grid', 'Footer — links', [
 	], '1/3', '1/1' ),
 
 	wrap( 'ftr-col-group', 'Group', '1/5', [
-		'css_advanced_flex' => css( WRP, 'width', [ 'desktop' => '230px', 'tablet' => '100%', 'mobile' => '100%' ] ),
+		'css_advanced_flex' => css( WRP, 'width', [ 'desktop' => 'calc((100% - 120px) * 0.209091)', 'tablet' => '100%', 'mobile' => '100%' ] ),
 	], [
 		ftr_heading( 'ftr-h-group', 'Group' ),
 		ftr_links( 'ftr-l-group', [
