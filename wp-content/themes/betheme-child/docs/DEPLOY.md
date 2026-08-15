@@ -66,8 +66,8 @@ The parent theme is inside the archive; nothing has to be shipped alongside it.
 
 ## 3. Import
 
-1. Install WordPress, drop in `betheme`, activate **Contact Form 7**.
-2. Untar the content archive over `wp-content/`.
+1. Install WordPress core.
+2. Untar the content archive over `wp-content/` — it brings both themes and both plugins.
 3. Import the SQL into an empty database.
 4. Point `wp-config.php` at that database.
 5. **Rewrite the URLs — do not use `sed`.** 17 rows of `mfn-page-items` hold
@@ -104,7 +104,20 @@ The parent theme is inside the archive; nothing has to be shipped alongside it.
    This link is a single postmeta row (`mfn_menu_item_megamenu = 78`) that was set by
    hand — it is the one thing no script recreates.
 7. **Contact form**: see §5.
-8. Load `/`, `/technology/`, `/contact/` and check at 1440px and 390px.
+8. **Run the checks instead of eyeballing them:**
+
+   ```bash
+   wp-content/themes/betheme-child/docs/build/verify_layout.py https://the-new-domain
+   ```
+
+   36 assertions — every page responds, button rows measure 14px, the phone gutter is
+   15px, the footer holds one row from 1440px down to 960px, the SEO tags are there and
+   the sitemap has 15 URLs. Every one of those was a real defect during the build and not
+   one of them was visible in a screenshot. Needs headless Chrome, exits non-zero on
+   failure, so CI can run it.
+
+9. Send one message through the contact form. That is the one thing the script leaves
+   alone, because a real submission lands in the CRM.
 
 ## 5. The contact form
 
