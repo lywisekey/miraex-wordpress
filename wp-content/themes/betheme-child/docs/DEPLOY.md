@@ -17,11 +17,11 @@ inventory are real counts, not estimates.
 | Design layer + builders | `wp-content/themes/betheme-child` | 2.8 MB |
 | Generated stylesheets | `wp-content/uploads/betheme/css/post-*.css` | derived; can be regenerated, see §4 |
 
-Dependencies to install on the target, **not** included in the export:
+Only **WordPress core** has to be installed separately; everything else is in the archive.
 
-- WordPress core
-- **betheme** parent theme (45 MB, paid — the receiving side needs a licence /
-  purchase code to get updates; the files themselves come from the current install)
+The **betheme** parent (v28.5.7) travels with it, but a purchase code is still needed to
+receive theme *updates* — an out-of-date paid theme is one of the most common ways a
+WordPress site is broken into, so this is worth sorting out rather than deferring.
 - **Contact Form 7** — no longer used by any page; the contact form goes to HubSpot.
   Keep it only if the old CF7 submission history matters, otherwise deactivate it.
 - **Rank Math SEO** — ships in the archive; `build/install_rankmath.php` can reinstall it
@@ -38,10 +38,20 @@ wp-content/themes/betheme-child/docs/build/export_site.sh [output-dir]
 Reads the credentials out of `wp-config.php` and writes:
 
 - `miraex-db-<stamp>.sql` — full database (~4.5 MB)
-- `miraex-content-<stamp>.tar.gz` — `betheme-child` + `plugins` + `uploads` (~15 MB).
-  The plugins ship with it deliberately: the database records Rank Math as active, so if
-  the files are missing WordPress deactivates it on load and every SEO tag disappears
-  without an error.
+- `miraex-content-<stamp>.tar.gz` — the whole of `wp-content` the site needs (~28 MB):
+  `themes/betheme`, `themes/betheme-child`, `plugins`, `uploads`. Untar it and WordPress
+  has everything except its own core.
+
+  Both the parent theme and the plugins ship deliberately. **betheme** is paid, but this
+  is the same site moving to its own server under the same licence — without it nothing
+  renders at all, so "install it separately" just hands the receiving side a blank page
+  and a shopping trip. **Plugins**, because the database records Rank Math as active: if
+  its files are missing, WordPress deactivates it during load and every SEO tag vanishes
+  with no error anywhere.
+
+  Keep the archive private. It carries a paid theme, and the database dump carries user
+  emails and password hashes. Neither belongs in the git repository, which is why both
+  folders are ignored there.
 - `README-first.txt`
 
 Run it where the database is reachable. On the current laradock setup that is the
@@ -52,7 +62,7 @@ docker exec laradock-workspace-1 bash \
   /var/www/.../wp-content/themes/betheme-child/docs/build/export_site.sh /tmp/miraex-handover
 ```
 
-Ship the parent `betheme` folder alongside it if the receiving side has no licence copy.
+The parent theme is inside the archive; nothing has to be shipped alongside it.
 
 ## 3. Import
 

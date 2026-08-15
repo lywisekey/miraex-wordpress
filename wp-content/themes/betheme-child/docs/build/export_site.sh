@@ -48,9 +48,12 @@ mysqldump --single-transaction --default-character-set=utf8mb4 \
 	> "$out/miraex-db-$stamp.sql"
 echo "database  -> miraex-db-$stamp.sql   ($(du -h "$out/miraex-db-$stamp.sql" | cut -f1))"
 
-# ---- 2. files this project owns -----------------------------------------
-# The parent betheme (45M) is a paid theme: ship it only if the receiving side
-# has no licence of their own. Add it to the list below if so.
+# ---- 2. everything under wp-content the site needs ----------------------
+# The parent betheme is included. It is a paid theme, but this is the same site
+# moving to its own server under the same licence — leaving it out means the
+# receiving side untars the archive and gets a blank page, because nothing renders
+# without the parent. Keep the archive private; it has no place in a public
+# repository, which is why git ignores the folder.
 # tar exits 1 on "file changed as we read it", which a bind mount triggers just from
 # timestamp jitter — that is a warning, not a failure. Only 2+ is fatal.
 # uploads/rank-math holds generated sitemap XML: shipping it would serve a stale
@@ -59,6 +62,7 @@ tar --warning=no-file-changed -czf "$out/miraex-content-$stamp.tar.gz" \
 	--exclude='wp-content/uploads/rank-math' \
 	--exclude='wp-content/uploads/wpcf7_uploads' \
 	-C "$root" \
+	wp-content/themes/betheme \
 	wp-content/themes/betheme-child \
 	wp-content/plugins \
 	wp-content/uploads || [ $? -le 1 ]
