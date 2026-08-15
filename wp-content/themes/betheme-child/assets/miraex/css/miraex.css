@@ -1,0 +1,480 @@
+/* Miraex child-theme content layer.
+ * The original design system is scoped under .miraex-page so it cannot
+ * collide with BeTheme/BeBuilder global styles.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+.miraex-page{--navy-900:#070f1c; --navy-800:#0a1b2e; --navy-700:#0b2545; --navy-600:#102f54;
+  --ink:#e8eef6; --ink-soft:#aebdce; --slate:#90a0b3;
+  --cyan:#19c6da; --cyan-bright:#34e2f0; --blue:#3b82f6; --violet:#7c6cf0;
+  --line:rgba(255,255,255,.10); --line-soft:rgba(255,255,255,.06);
+  --glass:rgba(12,26,46,.72);
+  --surface:#0c1d33; --surface-2:#0f2440; --surface-3:#13294a;
+  --good:#37d39b; --warn:#f1b24a;
+  --grad-spectral:linear-gradient(100deg,#19c6da 0%,#3b82f6 48%,#7c6cf0 100%);
+  --grad-spectral-soft:linear-gradient(100deg,rgba(25,198,218,.16),rgba(124,108,240,.16));
+  --grad-warm-cool:linear-gradient(90deg,#ff6a3d 0%,#f1b24a 18%,#19c6da 60%,#7c6cf0 100%);
+  --glow-cyan:0 0 0 1px rgba(25,198,218,.5),0 8px 30px rgba(25,198,218,.25);
+  
+  --f-display:"Space Grotesk",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --f-text:"Inter",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",monospace;
+  
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px; --s8:128px; --s9:160px;
+  --radius:14px; --radius-sm:10px; --radius-lg:22px; --radius-pill:999px;
+  --container:1200px; --container-wide:1320px;
+  --shadow:0 18px 50px -20px rgba(0,0,0,.7);
+  --shadow-soft:0 10px 30px -14px rgba(0,0,0,.55);
+  --ease:cubic-bezier(.2,.7,.2,1);}
+
+.miraex-page *::before,
+.miraex-page *::after{box-sizing:border-box}
+
+.miraex-page img,
+.miraex-page svg,
+.miraex-page video{max-width:100%;display:block;height:auto}
+
+.miraex-page h1,
+.miraex-page h2,
+.miraex-page h3,
+.miraex-page h4,
+.miraex-page h5{font-family:var(--f-display);font-weight:600;line-height:1.08;margin:0;letter-spacing:-.02em;color:#fff}
+
+.miraex-page .container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:24px}
+
+.miraex-page .container.wide{max-width:var(--container-wide)}
+
+.miraex-page .section:not(.mcb-section):not([class*="section-page-"]){padding-block:var(--s8)} /* excludes native BeBuilder sections and BeTheme's own empty .section-page-* wrappers */
+
+.miraex-page .section.tight:not(.mcb-section){padding-block:var(--s7)}
+
+.miraex-page .section-sm{padding-block:var(--s6)}
+
+.miraex-page .eyebrow{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--cyan);display:inline-flex;align-items:center;gap:10px;margin:0 0 18px}
+
+.miraex-page .eyebrow::before{content:"";width:26px;height:1px;background:var(--cyan);opacity:.7}
+
+.miraex-page .section-head{max-width:760px;margin-bottom:var(--s5)}
+
+.miraex-page .section-head.center{margin-inline:auto;text-align:center}
+
+.miraex-page .section-head.center .eyebrow{justify-content:center}
+
+.miraex-page h1.display{font-size:clamp(2.6rem,6vw,4.6rem);letter-spacing:-.03em}
+
+.miraex-page h2.h2{font-size:clamp(2rem,3.6vw,3rem)}
+
+.miraex-page h3.h3{font-size:clamp(1.3rem,2vw,1.6rem)}
+
+.miraex-page .lead{font-size:clamp(1.05rem,1.5vw,1.3rem);color:var(--ink-soft);font-weight:400;line-height:1.55}
+
+.miraex-page .muted{color:var(--slate)}
+
+.miraex-page .grad-text{background:var(--grad-spectral);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.miraex-page .bg-deep{background:var(--navy-900)}
+
+.miraex-page .bg-navy{background:var(--navy-800)}
+
+.miraex-page .bg-panel{background:linear-gradient(180deg,var(--navy-700),var(--navy-800))}
+
+.miraex-page .divider{height:1px;background:var(--line);border:0;margin:0}
+
+.miraex-page .btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-text);font-weight:600;
+  font-size:15px;letter-spacing:.01em;padding:14px 26px;border-radius:var(--radius-pill);
+  border:1px solid transparent;cursor:pointer;transition:.28s var(--ease);white-space:nowrap}
+
+.miraex-page .btn .ar{transition:transform .28s var(--ease)}
+
+.miraex-page .btn:hover .ar{transform:translateX(4px)}
+
+.miraex-page .btn-primary{background:var(--cyan);color:#04121b;box-shadow:0 10px 30px -8px rgba(25,198,218,.55)}
+
+.miraex-page .btn-primary:hover{background:var(--cyan-bright);box-shadow:0 14px 38px -8px rgba(25,198,218,.7);transform:translateY(-1px)}
+
+.miraex-page .btn-ghost{border-color:var(--line);color:#fff;background:rgba(255,255,255,.02)}
+
+.miraex-page .btn-ghost:hover{border-color:var(--cyan);background:rgba(25,198,218,.08)}
+
+.miraex-page .btn-light{background:#fff;color:#0a1b2e}
+
+.miraex-page .btn-light:hover{transform:translateY(-1px);box-shadow:var(--shadow-soft)}
+
+.miraex-page .btn-lg{padding:17px 32px;font-size:16px}
+
+.miraex-page .btn-row{display:flex;gap:14px;flex-wrap:wrap}
+
+.miraex-page .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;
+  background:radial-gradient(120% 90% at 80% 30%,rgba(16,47,84,.6),var(--navy-900) 60%)}
+
+.miraex-page .hero-media{position:absolute;inset:0;z-index:0}
+
+.miraex-page .hero-media img{width:100%;height:100%;object-fit:cover;opacity:.9}
+
+.miraex-page .hero-media::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--navy-900) 12%,rgba(7,15,28,.62) 46%,rgba(7,15,28,.15) 100%)}
+
+.miraex-page .hero-media::before{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(7,15,28,.5),transparent 22%,transparent 70%,var(--navy-800))}
+
+.miraex-page .hero .container{position:relative;z-index:2}
+
+.miraex-page .hero-inner{max-width:760px;padding-block:120px}
+
+.miraex-page .hero h1{font-size:clamp(2.7rem,6.2vw,5.2rem);letter-spacing:-.035em;margin-bottom:24px}
+
+.miraex-page .hero .lead{max-width:600px;margin-bottom:36px}
+
+.miraex-page .hero-meta{display:flex;gap:30px;flex-wrap:wrap;margin-top:54px;padding-top:30px;border-top:1px solid var(--line-soft)}
+
+.miraex-page .hero-meta .m b{font-family:var(--f-display);font-size:30px;color:#fff;display:block;letter-spacing:-.02em}
+
+.miraex-page .hero-meta .m span{font-size:13px;color:var(--slate);font-family:var(--f-mono);letter-spacing:.05em}
+
+.miraex-page .scroll-cue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:2;color:var(--slate);
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px}
+
+.miraex-page .scroll-cue .dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);animation:cue 1.8s var(--ease) infinite}
+
+@keyframes cue{
+0%{transform:translateY(0);opacity:0}
+40%{opacity:1}
+80%{transform:translateY(16px);opacity:0}
+100%{opacity:0}
+}
+
+.miraex-page .parent-strip{display:inline-flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;border:1px solid var(--line);
+  border-radius:var(--radius-pill);background:rgba(255,255,255,.03);font-size:13px;color:var(--ink-soft);margin-bottom:30px}
+
+.miraex-page .parent-strip b{color:#fff;font-weight:600}
+
+.miraex-page .parent-strip .tag{font-family:var(--f-mono);font-size:11px;color:#04121b;background:var(--cyan);
+  padding:5px 11px;border-radius:var(--radius-pill);letter-spacing:.04em}
+
+.miraex-page .grid{display:grid;gap:24px}
+
+.miraex-page .cols-2{grid-template-columns:repeat(2,1fr)}
+
+.miraex-page .cols-3{grid-template-columns:repeat(3,1fr)}
+
+.miraex-page .cols-4{grid-template-columns:repeat(4,1fr)}
+
+.miraex-page .card{background:linear-gradient(180deg,var(--surface),var(--navy-800));border:1px solid var(--line);
+  border-radius:var(--radius);padding:30px;transition:.3s var(--ease);position:relative;overflow:hidden}
+
+.miraex-page .card:hover{border-color:rgba(25,198,218,.4);transform:translateY(-4px);box-shadow:var(--shadow)}
+
+.miraex-page .card .ico{width:52px;height:52px;border-radius:13px;background:var(--grad-spectral-soft);border:1px solid var(--line);
+  display:grid;place-items:center;margin-bottom:20px}
+
+.miraex-page .card .ico svg{width:26px;height:26px;stroke:var(--cyan);fill:none}
+
+.miraex-page .card h3{font-size:1.35rem;margin-bottom:10px}
+
+.miraex-page .card p{color:var(--ink-soft);font-size:15.5px;margin-bottom:14px}
+
+.miraex-page .card .more{font-family:var(--f-mono);font-size:13px;color:var(--cyan);display:inline-flex;align-items:center;gap:8px;letter-spacing:.03em}
+
+.miraex-page .card .more .ar{transition:transform .25s}
+
+.miraex-page .card:hover .more .ar{transform:translateX(4px)}
+
+.miraex-page .card.feature::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:var(--grad-spectral);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:.3s}
+
+.miraex-page .card.feature:hover::after{opacity:.6}
+
+.miraex-page .vert-card{display:flex;flex-direction:column;min-height:340px}
+
+.miraex-page .vert-card .num{font-family:var(--f-mono);font-size:12px;color:var(--slate);letter-spacing:.1em;margin-bottom:auto}
+
+.miraex-page .imgcard{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--surface);
+  display:flex;flex-direction:column;transition:.3s var(--ease)}
+
+.miraex-page .imgcard:hover{transform:translateY(-4px);border-color:rgba(25,198,218,.35);box-shadow:var(--shadow)}
+
+.miraex-page .imgcard .ph{aspect-ratio:16/10;overflow:hidden;position:relative}
+
+.miraex-page .imgcard .ph img{width:100%;height:100%;object-fit:cover;transition:.5s var(--ease)}
+
+.miraex-page .imgcard:hover .ph img{transform:scale(1.05)}
+
+.miraex-page .imgcard .bd{padding:24px;display:flex;flex-direction:column;flex:1}
+
+.miraex-page .imgcard .date{font-family:var(--f-mono);font-size:12px;color:var(--cyan);letter-spacing:.05em;margin-bottom:10px}
+
+.miraex-page .imgcard h3{font-size:1.15rem;line-height:1.25;margin-bottom:10px}
+
+.miraex-page .imgcard p{color:var(--ink-soft);font-size:14.5px;flex:1}
+
+.miraex-page .imgcard .more{font-family:var(--f-mono);font-size:12.5px;color:var(--cyan);margin-top:14px;display:inline-flex;gap:8px}
+
+.miraex-page .tagrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+
+.miraex-page .tag-pill{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--cyan);
+  border:1px solid rgba(25,198,218,.3);background:rgba(25,198,218,.07);padding:5px 11px;border-radius:var(--radius-pill)}
+
+.miraex-page .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+
+.miraex-page .stat{padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:rgba(255,255,255,.02)}
+
+.miraex-page .stat b{font-family:var(--f-display);font-size:clamp(2rem,3.4vw,2.9rem);display:block;letter-spacing:-.02em;
+  background:var(--grad-spectral);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.miraex-page .stat span{color:var(--slate);font-size:13.5px;font-family:var(--f-mono);letter-spacing:.03em}
+
+.miraex-page .logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:18px 40px;opacity:.9}
+
+.miraex-page .logos .lg{font-family:var(--f-display);font-weight:500;font-size:16px;color:var(--ink-soft);letter-spacing:.01em;
+  padding:10px 18px;border:1px solid var(--line);border-radius:var(--radius-pill);transition:.25s}
+
+.miraex-page .logos .lg:hover{color:#fff;border-color:var(--cyan)}
+
+.miraex-page .logos .lg.mark{padding:8px 14px;display:inline-flex;align-items:center}
+
+.miraex-page .logos .lg.mark img{height:auto;width:auto;max-height:34px;max-width:132px;display:block;filter:brightness(0) invert(1);opacity:.72;transition:opacity .25s}
+
+.miraex-page .logos .lg.mark:hover img{opacity:1}
+
+.miraex-page .stack{display:flex;flex-direction:column;gap:12px}
+
+.miraex-page .stack-layer{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:20px;
+  padding:20px 24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+  transition:.3s var(--ease);cursor:default;position:relative;overflow:hidden}
+
+.miraex-page .stack-layer:hover{border-color:rgba(25,198,218,.45);background:var(--surface-2);transform:translateX(6px)}
+
+.miraex-page .stack-layer .lyr-n{font-family:var(--f-mono);font-size:13px;color:var(--slate)}
+
+.miraex-page .stack-layer h4{font-size:1.1rem;margin-bottom:3px;color:#fff}
+
+.miraex-page .stack-layer p{margin:0;color:var(--ink-soft);font-size:14px}
+
+.miraex-page .stack-layer .who{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);border:1px solid var(--line);
+  padding:7px 13px;border-radius:var(--radius-pill);white-space:nowrap}
+
+.miraex-page .stack-layer.is-miraex{background:linear-gradient(100deg,rgba(25,198,218,.14),rgba(124,108,240,.12));border-color:rgba(25,198,218,.5)}
+
+.miraex-page .stack-layer.is-miraex .who{background:var(--cyan);color:#04121b;border-color:transparent;font-weight:600}
+
+.miraex-page .stack-layer.is-miraex::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grad-spectral)}
+
+.miraex-page .spec{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+
+.miraex-page .spec th,
+.miraex-page .spec td{text-align:left;padding:15px 20px;border-bottom:1px solid var(--line-soft);font-size:15px}
+
+.miraex-page .spec th{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);background:rgba(255,255,255,.02);font-weight:500}
+
+.miraex-page .spec td:first-child{color:var(--ink-soft);width:45%}
+
+.miraex-page .spec td:last-child{color:#fff;font-family:var(--f-mono);font-size:14px}
+
+.miraex-page .spec tr:last-child td{border-bottom:0}
+
+.miraex-page .spec tr:hover td{background:rgba(25,198,218,.04)}
+
+.miraex-page .split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+
+.miraex-page .split.rev .media{order:2}
+
+.miraex-page .media-frame{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);position:relative}
+
+.miraex-page .media-frame img{width:100%;aspect-ratio:3/2;object-fit:cover}
+
+.miraex-page .media-frame.glow::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 80px rgba(25,198,218,.12);border-radius:inherit}
+
+.miraex-page .ticks{list-style:none;padding:0;margin:18px 0 0}
+
+.miraex-page .ticks li{display:flex;gap:13px;padding:9px 0;color:var(--ink-soft);font-size:15.5px}
+
+.miraex-page .ticks li svg{flex-shrink:0;margin-top:3px;width:20px;height:20px;stroke:var(--cyan)}
+
+.miraex-page .ticks li b{color:#fff;font-weight:600}
+
+.miraex-page .app{display:flex;gap:16px;padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:rgba(255,255,255,.015);transition:.25s}
+
+.miraex-page .app:hover{border-color:rgba(25,198,218,.35);background:rgba(25,198,218,.04)}
+
+.miraex-page .app .n{font-family:var(--f-mono);font-size:13px;color:var(--cyan);flex-shrink:0}
+
+.miraex-page .app b{display:block;color:#fff;margin-bottom:4px;font-size:15.5px}
+
+.miraex-page .app p{margin:0;color:var(--ink-soft);font-size:14px}
+
+.miraex-page .timeline{position:relative;margin-top:10px;padding-left:30px}
+
+.miraex-page .timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:linear-gradient(var(--cyan),var(--violet),transparent)}
+
+.miraex-page .tl-item{position:relative;padding:0 0 30px 26px}
+
+.miraex-page .tl-item::before{content:"";position:absolute;left:-30px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 4px rgba(25,198,218,.15)}
+
+.miraex-page .tl-item .yr{font-family:var(--f-mono);font-size:12.5px;color:var(--cyan);letter-spacing:.06em;margin-bottom:4px}
+
+.miraex-page .tl-item b{display:block;color:#fff;margin-bottom:3px}
+
+.miraex-page .tl-item p{margin:0;color:var(--ink-soft);font-size:14.5px}
+
+.miraex-page .cta-band{position:relative;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line);
+  padding:72px 56px;background:linear-gradient(120deg,var(--navy-700),var(--navy-800));text-align:center}
+
+.miraex-page .cta-band::before{content:"";position:absolute;inset:0;background:url("../assets/img/texture-entanglement.jpg") center/cover;opacity:.18;mix-blend-mode:screen}
+
+.miraex-page .cta-band .inner{position:relative;z-index:1;max-width:680px;margin-inline:auto}
+
+.miraex-page .form{display:grid;gap:18px}
+
+.miraex-page .field{display:flex;flex-direction:column;gap:8px}
+
+.miraex-page .field.row2{grid-template-columns:1fr 1fr;display:grid}
+
+.miraex-page label{font-size:13.5px;color:var(--ink-soft);font-weight:500}
+
+.miraex-page label .req{color:var(--cyan)}
+
+.miraex-page input,
+.miraex-page select,
+.miraex-page textarea{font-family:var(--f-text);font-size:15px;color:#fff;background:rgba(255,255,255,.03);
+  border:1px solid var(--line);border-radius:10px;padding:14px 16px;transition:.2s;width:100%}
+
+.miraex-page input::placeholder,
+.miraex-page textarea::placeholder{color:#5d6f84}
+
+.miraex-page input:focus,
+.miraex-page select:focus,
+.miraex-page textarea:focus{outline:none;border-color:var(--cyan);background:rgba(25,198,218,.05)}
+
+.miraex-page select option{color:#0b1220;background:#fff}
+
+.miraex-page textarea{resize:vertical;min-height:120px}
+
+.miraex-page .check{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;color:var(--slate)}
+
+.miraex-page .check input{width:18px;height:18px;margin-top:2px;accent-color:var(--cyan)}
+
+.miraex-page .page-hero{position:relative;padding:160px 0 70px;overflow:hidden;border-bottom:1px solid var(--line-soft);
+  background:radial-gradient(100% 120% at 80% 0%,rgba(16,47,84,.55),var(--navy-900))}
+
+.miraex-page .page-hero .crumbs{font-family:var(--f-mono);font-size:12.5px;color:var(--slate);margin-bottom:20px;display:flex;gap:8px;flex-wrap:wrap}
+
+.miraex-page .page-hero .crumbs a{color:var(--ink-soft)}
+
+.miraex-page .page-hero .crumbs a:hover{color:var(--cyan)}
+
+.miraex-page .page-hero h1{font-size:clamp(2.3rem,5vw,3.8rem);max-width:880px;margin-bottom:18px}
+
+.miraex-page .page-hero .lead{max-width:680px}
+
+.miraex-page .page-hero .glowfx{position:absolute;right:-10%;top:-30%;width:60%;height:160%;
+  background:radial-gradient(closest-side,rgba(25,198,218,.18),transparent);pointer-events:none}
+
+.miraex-page .acc{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+
+.miraex-page .acc details{border-bottom:1px solid var(--line-soft)}
+
+.miraex-page .acc details:last-child{border-bottom:0}
+
+.miraex-page .acc summary{list-style:none;cursor:pointer;padding:22px 26px;display:flex;justify-content:space-between;gap:20px;
+  font-family:var(--f-display);font-weight:500;font-size:1.1rem;color:#fff;transition:.2s}
+
+.miraex-page .acc summary::-webkit-details-marker{display:none}
+
+.miraex-page .acc summary:hover{background:rgba(255,255,255,.02)}
+
+.miraex-page .acc summary .pl{color:var(--cyan);font-size:1.4rem;transition:.25s;line-height:1}
+
+.miraex-page .acc details[open] summary .pl{transform:rotate(45deg)}
+
+.miraex-page .acc .acc-body{padding:0 26px 24px;color:var(--ink-soft);font-size:15.5px}
+
+.miraex-page .reveal{opacity:0;transform:translateY(26px);transition:.7s var(--ease)}
+
+.miraex-page .reveal.in{opacity:1;transform:none}
+
+.miraex-page .reveal.d1{transition-delay:.08s}
+
+.miraex-page .reveal.d2{transition-delay:.16s}
+
+.miraex-page .reveal.d3{transition-delay:.24s}
+
+.miraex-page .reveal.d4{transition-delay:.32s}
+
+.miraex-page .kicker-line{width:60px;height:3px;border-radius:3px;background:var(--grad-spectral);margin:0 0 22px}
+
+.miraex-page .note{font-size:13px;color:var(--slate);font-style:italic}
+
+.miraex-page .center{text-align:center}
+
+.miraex-page .mt-s{margin-top:var(--s3)}
+
+.miraex-page .mt-m{margin-top:var(--s5)}
+
+.miraex-page .mb-0{margin-bottom:0}
+
+.miraex-page .maxw{max-width:760px}
+
+.miraex-page .maxw.center{margin-inline:auto}
+
+@media (max-width:1024px){
+.miraex-page .split{gap:40px}
+.miraex-page .cols-4{grid-template-columns:repeat(2,1fr)}
+.miraex-page .stats{grid-template-columns:repeat(2,1fr)}
+}
+
+@media (max-width:860px){
+.miraex-page .section:not(.mcb-section):not([class*="section-page-"]){padding-block:var(--s6)}
+.miraex-page .cols-2,
+.miraex-page .cols-3,
+.miraex-page .split,
+.miraex-page .field.row2{grid-template-columns:1fr}
+.miraex-page .split.rev .media{order:0}
+.miraex-page .hero-inner{padding-block:120px 90px}
+.miraex-page .cta-band{padding:48px 26px}
+.miraex-page .stack-layer{grid-template-columns:40px 1fr;gap:14px}
+.miraex-page .stack-layer .who{grid-column:2;justify-self:start;margin-top:6px}
+}
+
+@media (max-width:520px){
+.miraex-page .container{padding-inline:18px}
+.miraex-page .stats{grid-template-columns:1fr 1fr;gap:14px}
+.miraex-page .hero-meta{gap:22px}
+.miraex-page .btn{padding:13px 22px}
+}
+
+@media (prefers-reduced-motion:reduce){
+.miraex-page .reveal{opacity:1;transform:none;transition:none}
+}
+
+.miraex-page .btn svg{width:18px;height:18px;flex:none;transition:transform .25s var(--ease)}
+
+.miraex-page .btn:hover svg{transform:translateX(3px)}
+
+.miraex-page .btn-primary svg,
+.miraex-page .btn-light svg{stroke:#04121b}
+
+.miraex-page .more svg{width:16px;height:16px;flex:none;vertical-align:-3px;transition:transform .25s var(--ease)}
+
+.miraex-page .card:hover .more svg,
+.miraex-page .imgcard:hover .more svg,
+.miraex-page a.more:hover svg{transform:translateX(4px)}
+
+.miraex-page .app .n svg{width:22px;height:22px;stroke:var(--cyan);flex:none}
+
+.miraex-page .ticks li svg{flex:none}
+
+.miraex-page .hero-meta .m b span{color:inherit}
+
+.miraex-page .news-feat{display:grid;grid-template-columns:1.1fr 1fr;align-items:stretch}
+
+.miraex-page .news-feat .ph{aspect-ratio:auto}
+
+.miraex-page .news-feat .ph img{height:100%}
+
+@media (max-width:860px){
+.miraex-page .news-feat{grid-template-columns:1fr}
+.miraex-page .news-feat .ph{aspect-ratio:16/10}
+.miraex-page .news-feat .bd{padding:28px!important}
+}

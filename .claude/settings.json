@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:ashy-forest-0b7587303.7.azurestaticapps.net)",
+      "Read(//Volumes/Hawk/workspace/wisekey/wordpress/miraex.com/**)",
+      "Bash(curl -s -L https://ashy-forest-0b7587303.7.azurestaticapps.net -o ref.html)",
+      "Bash(docker cp *)",
+      "Bash(awk 'NR>=7428 && NR<=7600' class-mfn-builder-fields.php)",
+      "Bash(curl -s -L https://ashy-forest-0b7587303.7.azurestaticapps.net/css/app.css -o app.css)",
+      "Read(//private/etc/**)",
+      "Bash(curl -sk -o /dev/null -w \"%{http_code} %{url_effective}\\\\n\" https://miraex.com/)",
+      "Bash(curl -sk -o /dev/null -w \"%{http_code}\\\\n\" https://miraex.com/wp-content/uploads/2026/08/epfl.png)",
+      "Bash(cd /Volumes/Hawk/workspace/wisekey/wordpress/miraex.com/code/wp-content/themes/betheme; grep -n \"seo_content\" functions/builder/class-mfn-builder-admin.php | head; sed -n '/\\\\$seo_content/,+12p' functions/builder/class-mfn-builder-admin.php | head -40)",
+      "Bash(grep -o \"border-radius[^\\\\\"',;]\\\\{0,40\\\\}\" functions/builder/assets/builder.js)",
+      "Bash(curl -sk https://miraex.com/ -o out.html -w \"%{http_code} %{size_download}\\\\n\")",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=1440,4000 --screenshot=home.png --virtual-time-budget=8000 https://miraex.com/)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=1440,7600 --screenshot=home2.png --virtual-time-budget=9000 https://miraex.com/)",
+      "Bash(sips -c 2200 1440 --cropOffset -1900 0 c1.png)",
+      "Bash(sips -g pixelHeight c1.png)",
+      "Bash(sips -c 1200 1440 --cropOffset 3000 0 t1.png)",
+      "Bash(sips -g pixelHeight -g pixelWidth t1.png)",
+      "Bash(sips -c 1400 1440 --cropOffset 4150 0 t2.png)",
+      "Bash(sips -c 1500 1440 --cropOffset 5900 0 t3.png)",
+      "Bash(sips -c 700 1440 --cropOffset 5450 0 t4.png)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=1440,7600 --screenshot=home3.png --virtual-time-budget=9000 https://miraex.com/)",
+      "Bash(sips -c 1500 1440 --cropOffset 4600 0 u1.png)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=1440,7600 --screenshot=home4.png --virtual-time-budget=9000 https://miraex.com/)",
+      "Bash(sips -c 1300 1440 --cropOffset 3550 0 u2.png)",
+      "Bash(sips -c 1400 1440 --cropOffset 1500 0 u3.png)",
+      "Bash(sips -c 1000 1440 --cropOffset 6250 0 u4.png)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=1440,2000 --screenshot=hero.png --virtual-time-budget=8000 https://miraex.com/)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=414,3000 --screenshot=mobile.png --virtual-time-budget=8000 https://miraex.com/)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=414,2600 --screenshot=mobile2.png --virtual-time-budget=8000 https://miraex.com/)",
+      "Bash(grep -o \"@media\\(max-width: 767px\\){[^@]\\\\{0,400\\\\}\" post-41.css)",
+      "Bash(curl -sk https://miraex.com/ -o out2.html)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --ignore-certificate-errors --window-size=414,1400 --screenshot=m_nocss.png --virtual-time-budget=8000 file://__TRACKED_VAR__/nocss.html)",
+      "Bash(grep -o \"\\\\.mcb-section[^{,]*{[^}]*}\" be.css)",
+      "Read(//Users/vuvanly/.cache/puppeteer/**)",
+      "Bash(node -e \"console.log\\(require.resolve\\('puppeteer'\\)\\)\")",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --ignore-certificate-errors --window-size=414,900 --screenshot=probe.png --virtual-time-budget=9000 file://__TRACKED_VAR__/probe.html)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=1440,6400 --screenshot=final.png --virtual-time-budget=9000 https://miraex.com/)",
+      "Bash(sips -g pixelHeight final.png)",
+      "Bash(sips -c 1400 1440 --cropOffset 300 0 f1.png)",
+      "Bash(find /Volumes/Hawk/workspace/wisekey /private/tmp/claude-501 -name \"import_clients.php\" -o -name \"import_svg.php\" 2>/dev/null | head)",
+      "Read(//Volumes/Hawk/workspace/wisekey/**)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=414,2000 --screenshot=mob_final.png --virtual-time-budget=8000 https://miraex.com/)",
+      "Bash(sips -c 1300 1440 --cropOffset 5100 0 f2.png)"
+    ],
+    "additionalDirectories": [
+      "/Volumes/Hawk/workspace/wisekey/wordpress/miraex.com/code/wp-content/themes/betheme/functions/builder"
+    ]
+  }
+}

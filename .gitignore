@@ -46,3 +46,29 @@ wp-config.php
 # Note: If you wish to whitelist themes,
 # uncomment the next line
 #/wp-content/themes
+# ---------------------------------------------------------------------------
+# Miraex additions
+#
+# The repository holds the hand-written half of the site: the child theme and
+# the builders. Everything below either belongs to somebody else, is binary, or
+# is regenerated on the target — all of it travels in the handover archive
+# instead (see wp-content/themes/betheme-child/docs/DEPLOY.md).
+# ---------------------------------------------------------------------------
+
+# Paid parent theme: ships with its own licence, 45 MB, not ours to publish
+/wp-content/themes/betheme/
+
+# Plugins come from wordpress.org and are reinstalled by
+# docs/build/install_rankmath.php and docs/build/install_litespeed.php
+/wp-content/plugins/
+
+# Generated: BeTheme rebuilds these from the builder data, LiteSpeed from the assets
+/wp-content/uploads/betheme/
+/wp-content/litespeed/
+/wp-content/et-cache/
+
+# Local database dumps and handover archives — a dump carries user emails and
+# password hashes and has no business in a repository
+/miraex-handover/
+*.sql
+*.tar.gz
