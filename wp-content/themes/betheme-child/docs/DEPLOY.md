@@ -70,7 +70,12 @@ The parent theme is inside the archive; nothing has to be shipped alongside it.
 2. Untar the content archive over `wp-content/` — it brings both themes and both plugins.
 3. Import the SQL into an empty database.
 4. Point `wp-config.php` at that database.
-5. **Rewrite the URLs — do not use `sed`.** 17 rows of `mfn-page-items` hold
+5. **Only if the domain changes.** The database stores `https://miraex.com` (no `www`,
+   https). If the site is going live on exactly that, skip this step — and with it the
+   single biggest risk in this document. See "Testing before DNS moves" below for how to
+   reach the new server in the meantime.
+
+   Otherwise — **rewrite the URLs, and do not use `sed`.** 17 rows of `mfn-page-items` hold
    PHP-serialized arrays whose strings are length-prefixed
    (`s:66:"https://miraex.com/wp-content/uploads/…"`). A plain text replace changes the
    string without changing the `66`, and BeBuilder then fails to unserialize the page —
@@ -84,6 +89,28 @@ The parent theme is inside the archive; nothing has to be shipped alongside it.
    is fine; a text editor and `sed` are not.
 6. Activate the **betheme-child** theme (`stylesheet = betheme-child`,
    `template = betheme`).
+
+### Testing before DNS moves
+
+If the domain is not changing, the new server cannot answer for `miraex.com` until DNS
+points at it — and the site cannot be checked on a temporary host name, because 17 rows of
+builder data and 102 attachment records carry `https://miraex.com` as an absolute URL. On
+a preview domain those still point at the old server: the page renders, the images come
+from the wrong machine, and nothing looks obviously wrong until DNS moves and something
+breaks.
+
+Point the **testing machine's hosts file** at the new server instead:
+
+```
+<new-server-ip>   miraex.com
+```
+
+The site then serves from the new host with the URLs it already has, the public keeps
+seeing the old one, and no database rewrite happens at all. Reverse the entry when the
+check is done. This is what the local environment already does.
+
+Rewriting to a preview domain and back again means running a serialization-aware replace
+twice, on data where a mistake produces blank pages — worth avoiding for a test.
 
 ## 4. After the import — checks that actually catch breakage
 
