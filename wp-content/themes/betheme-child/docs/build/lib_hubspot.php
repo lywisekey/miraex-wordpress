@@ -95,6 +95,14 @@ $options = '<option value="" disabled selected>Select an intent…</option>';
 	
 		var status = form.querySelector( ".miraex-hs-status" );
 		var button = form.querySelector( "button[type=submit]" );
+		/* Declared before anything reads it. `var` hoists, so a use above this line does
+		   not fail to parse — it throws at run time on `undefined.turnstile`, the script
+		   dies before the submit listener is attached, and the button falls back to a
+		   native form post that reloads the page with the answers in the URL. It looks
+		   like "the form does nothing" and leaves no error on screen. */
+		var config   = window.MIRAEX_CONTACT || {};
+		var endpoint = config.endpoint || "/wp-json/miraex/v1/contact";
+
 		var done   = form.parentElement.querySelector( ".miraex-hs-done" );
 		var again  = done.querySelector( ".miraex-hs-again" );
 		var widget = null;
@@ -121,8 +129,6 @@ $options = '<option value="" disabled selected>Select an intent…</option>';
 		/* The browser no longer talks to HubSpot: it posts here, and inc/hubspot-proxy.php
 		   validates, rate-limits and forwards. The portal id and form GUID stay on the
 		   server, so nobody can lift them from this page and post to HubSpot directly. */
-		var config   = window.MIRAEX_CONTACT || {};
-		var endpoint = config.endpoint || "/wp-json/miraex/v1/contact";
 	
 		function cookie( name ) {
 			var m = document.cookie.match( "(^|;)\\\\s*" + name + "\\\\s*=\\\\s*([^;]+)" );
