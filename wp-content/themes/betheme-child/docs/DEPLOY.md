@@ -143,8 +143,10 @@ twice, on data where a mistake produces blank pages — worth avoiding for a tes
    one of them was visible in a screenshot. Needs headless Chrome, exits non-zero on
    failure, so CI can run it.
 
-9. Send one message through the contact form. That is the one thing the script leaves
-   alone, because a real submission lands in the CRM.
+9. Send one message through the contact form and **confirm it arrives in HubSpot** — not
+   just that the page says "Message sent". The script leaves this alone because a real
+   submission lands in the CRM, and it is the only step that catches a portal-side block:
+   HubSpot returns `200 OK` either way (see §5).
 
 ## 5. The contact form
 
@@ -167,6 +169,13 @@ name every required field, and creates no contact):
 | Consent | `consent`, sent as `"true"` |
 
 If HubSpot's form changes, re-check with the same trick before trusting a green response.
+
+**The sending domain has to be registered in the HubSpot portal.** Until it is, HubSpot
+still answers `200 OK` with an `inlineMessage` body — the site sees a perfectly successful
+submission — while nothing arrives on the HubSpot side. This cost an afternoon of looking
+for a bug in working code. If the site ever moves to a new domain, a staging host
+included, add that domain in HubSpot **before** concluding the form is broken, and send one
+message afterwards to confirm.
 
 Spam is handled by a honeypot field rather than a captcha: no third-party service, no
 hosting dependency, nothing for a visitor to solve.
