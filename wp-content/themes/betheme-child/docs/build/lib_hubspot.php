@@ -1,10 +1,13 @@
 <?php
 /**
- * The /contact/ form, posting straight to HubSpot's Forms Submission API.
+ * The /contact/ form: markup, styling and the browser half of the submission.
+ *
+ * This builds the form as BeBuilder data. It does **not** talk to HubSpot — the form
+ * posts to this site, and `inc/hubspot-proxy.php` validates and forwards. The portal id
+ * and form GUID live there, so they never reach the page.
  *
  * Why not the js.hsforms.net embed: it renders into a cross-origin iframe, so none of
- * the design (field radius, cyan focus ring, the pill button) can be styled from this
- * site. The submission endpoint is public, so nothing secret ends up in the page.
+ * the design (field radius, cyan focus ring, the pill button) can be styled from here.
  *
  * The field names were confirmed against the live form rather than guessed: an
  * incomplete POST comes back with REQUIRED_FIELD errors naming every required field,
@@ -12,13 +15,6 @@
  * silently** — a wrong name loses the answer without any error, which is why
  * `comments` (not `message`) and `miraex_intent` matter.
  */
-
-const HS_PORTAL = '9201667';
-const HS_FORM   = 'f1490e22-9dbb-479d-8c82-79d87fb33f1a';
-const HS_REGION = 'na1';
-
-/** Checkbox property, not a HubSpot legal-consent object — it takes a plain "true". */
-const HS_CONSENT_VALUE = 'true';
 
 /**
  * label shown in the select => value stored in the CRM.
