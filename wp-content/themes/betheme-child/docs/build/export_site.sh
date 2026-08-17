@@ -85,14 +85,16 @@ Not included, install separately:
   - betheme (parent theme, paid — needs its own licence/purchase code)
   - Contact Form 7 (the only plugin)
 
-Read DEPLOY.md in this folder first — it is the same file that ships inside the
-tarball at wp-content/themes/betheme-child/docs/DEPLOY.md.
+Read DEPLOY.md in this folder first — same file as
+wp-content/themes/betheme-child/docs/DEPLOY.md inside the tarball. Sections 1-4 are
+the ordered deploy path; it opens with the four failures that produce no error
+message, which is where to look first if something behaves oddly.
 
-Two things that will bite if skipped:
-  1. Do NOT rewrite the domain with sed. The builder data is PHP-serialized with
-     length-prefixed strings; use wp search-replace --precise or Better Search Replace.
-  2. /privacy/ and /terms-of-service/ are DRAFTS pending legal review — every open
-     point is marked [TO CONFIRM: ...] on the page itself. Do not publish as-is.
+The two that matter most:
+  1. Do NOT rewrite the domain (it is not changing). If it ever changes, never with
+     sed — the builder data is PHP-serialized with length-prefixed strings.
+  2. /privacy/ and /terms-of-service/ are DRAFTS pending legal review, with every
+     open point marked [TO CONFIRM: ...] in the visible page text. Not for public.
 EOF
 
 echo
