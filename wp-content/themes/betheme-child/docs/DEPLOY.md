@@ -243,7 +243,68 @@ So a burst is a bandwidth problem, not a CPU one, and the fix is a CDN plus ligh
 images (WebP/AVIF), not a bigger hosting plan. PHP workers only matter if page caching
 is off — with it on, readers never reach PHP.
 
-## 8. What the site tells visitors about itself
+## 8. On AWS specifically
+
+Three things change, and two of them fail without saying anything.
+
+### `MIRAEX_BEHIND_PROXY` — required behind an ALB or CloudFront
+
+`$_SERVER['REMOTE_ADDR']` is then the load balancer, not the visitor. Two consequences,
+neither of which produces an error:
+
+- The rate limit in `inc/hubspot-proxy.php` buckets by address, so **every visitor on earth
+  shares one bucket** — the eleventh message of the hour from anybody is refused.
+- HubSpot receives the balancer's address as `ipAddress`, which blinds its own spam scoring.
+
+```php
+define( 'MIRAEX_BEHIND_PROXY', true );   // wp-config.php
+```
+
+Only set it when a proxy really is in front. It makes the code trust the first hop of
+`X-Forwarded-For`, and a client can forge that header when nothing strips it.
+
+### HTTPS terminated at the load balancer
+
+If the ALB or CloudFront speaks HTTPS to the world and HTTP to the instance, WordPress sees
+a plain request while `siteurl` says `https://` — which gives redirect loops and mixed
+content. Above the `require_once ABSPATH . 'wp-settings.php'` line in `wp-config.php`:
+
+```php
+if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+	$_SERVER['HTTPS'] = 'on';
+}
+```
+
+### LiteSpeed Cache stops caching pages
+
+Its page cache needs LiteSpeed or OpenLiteSpeed. On the nginx or Apache you will almost
+certainly run on EC2 or Lightsail, the settings are stored and **inert** — and inert looks
+identical to working in the admin (§7). Pick one:
+
+- **CloudFront in front, caching HTML.** The AWS-native answer and the one that matches the
+  numbers: a burst is a bandwidth problem, not a CPU one (§7). Nothing in the page is
+  per-visitor, so whole pages can be cached at the edge. Keep `/wp-json/` and `wp-admin`
+  uncached.
+- **Install OpenLiteSpeed** on the instance and everything configured here keeps working.
+- **Swap the plugin** for one that caches in PHP (Cache Enabler, WP Super Cache) or use
+  nginx `fastcgi_cache`. Then LiteSpeed Cache should be deactivated rather than left on
+  looking busy.
+
+### Smaller notes
+
+- **One instance, or shared storage.** BeTheme writes `uploads/betheme/css/post-*.css`
+  (44 files today) and the builders regenerate them. Behind an autoscaling group each
+  instance would keep its own copy, so either stay on a single instance or put `uploads`
+  on EFS.
+- **Email.** EC2 blocks outbound port 25 by default. The contact form does not care — it
+  posts to HubSpot — but WordPress's own mail (password resets, admin notices) will vanish
+  silently. Use SES with an SMTP plugin if that matters.
+- **RDS is fine.** Nothing here depends on the database being local; the rate limiter uses
+  transients, which live in the database and work across instances.
+- `export_site.sh` reads the credentials out of `wp-config.php`, so it works unchanged on
+  RDS. `verify_layout.py` runs from anywhere against a URL.
+
+## 9. What the site tells visitors about itself
 
 `betheme-child/inc/hardening.php` removes the version numbers and the discovery links
 WordPress prints by default: the `generator` meta tag (which named the exact version),
@@ -269,7 +330,7 @@ matters is elsewhere: keep WordPress, betheme and the plugins updated, and restr
 `/wp-login.php` and `/wp-admin/` at the server (IP allowlist or HTTP auth). Both are open
 to the world today, and that is where brute-force traffic actually lands.
 
-## 9. Missing / known gaps
+## 10. Missing / known gaps
 
 - `/privacy/` and `/terms-of-service/` now exist, but they are **drafts awaiting legal
   review**. Every open decision is written into the page itself as `[TO CONFIRM: …]` —
@@ -288,7 +349,7 @@ to the world today, and that is where brute-force traffic actually lands.
   (`ashy-forest-0b7587303.7.azurestaticapps.net`). Do not rely on it for a redeploy —
   transfer `uploads` instead; that host will not stay up forever.
 
-## 10. Version control
+## 11. Version control
 
 The install is not under git today. Worth doing before handover — the child theme is the
 only part that is hand-written:

@@ -58,7 +58,13 @@ add_action( 'rest_api_init', function () {
 
 function miraex_client_ip() {
 	/* Behind a proxy or CDN the socket address is the edge, not the visitor. Only the
-	   first hop of X-Forwarded-For is worth reading, and only when a proxy is expected. */
+	   first hop of X-Forwarded-For is worth reading, and only when a proxy is expected —
+	   a client can forge the header when nothing in front strips it.
+	 *
+	 * On AWS behind an ALB or CloudFront, `define( 'MIRAEX_BEHIND_PROXY', true )` is not
+	 * optional: without it every visitor arrives as the balancer, they all share one
+	 * rate-limit bucket, and HubSpot scores spam against the wrong address. Nothing
+	 * errors — the eleventh message of the hour from anybody is simply refused. */
 	if ( defined( 'MIRAEX_BEHIND_PROXY' ) && MIRAEX_BEHIND_PROXY && ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 		$parts = explode( ',', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) );
 		$ip    = trim( $parts[0] );
