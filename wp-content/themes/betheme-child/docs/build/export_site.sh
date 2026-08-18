@@ -43,9 +43,30 @@ echo
 
 # ---- 1. database ---------------------------------------------------------
 # --single-transaction keeps it consistent without locking the site.
+# Dumped to a temporary file and only moved into place once it looks complete.
+# Writing straight to the output path leaves a 0-byte .sql behind when mysqldump is
+# missing or the credentials are wrong — a file that looks like a dump, and wipes the
+# site of anyone who imports it.
+tmp_sql="$(mktemp)"
+trap 'rm -f "$tmp_sql"' EXIT
+
+if ! command -v mysqldump >/dev/null 2>&1; then
+	echo "mysqldump not found. Run this where the database is reachable — in the" >&2
+	echo "laradock setup that is the workspace container, not the host." >&2
+	exit 1
+fi
+
 mysqldump --single-transaction --default-character-set=utf8mb4 \
-	-h "${DB_HOST%%:*}" -u "$DB_USER" ${DB_PASS:+-p"$DB_PASS"} "$DB_NAME" \
-	> "$out/miraex-db-$stamp.sql"
+	-h "${DB_HOST%%:*}" -u "$DB_USER" ${DB_PASS:+-p"$DB_PASS"} "$DB_NAME" > "$tmp_sql"
+
+# mysqldump writes this as its last line; without it the dump was cut short.
+if ! tail -5 "$tmp_sql" | grep -q "Dump completed"; then
+	echo "The dump is incomplete — refusing to hand over a truncated database." >&2
+	exit 1
+fi
+
+mv "$tmp_sql" "$out/miraex-db-$stamp.sql"
+trap - EXIT
 echo "database  -> miraex-db-$stamp.sql   ($(du -h "$out/miraex-db-$stamp.sql" | cut -f1))"
 
 # ---- 2. everything under wp-content the site needs ----------------------
@@ -68,33 +89,65 @@ tar --warning=no-file-changed -czf "$out/miraex-content-$stamp.tar.gz" \
 	wp-content/uploads || [ $? -le 1 ]
 echo "content   -> miraex-content-$stamp.tar.gz  ($(du -h "$out/miraex-content-$stamp.tar.gz" | cut -f1))"
 
+# ---- 3. the hand-written code on its own --------------------------------
+# The same files are already inside the content archive under
+# wp-content/themes/betheme-child. This copy exists so the code can be read and
+# reviewed without unpacking 28 MB or cloning anything, and so the file listing makes
+# it obvious that the code is part of the handover.
+#
+# git archive rather than a plain zip, so the contents are exactly what the repository
+# tracks: no wp-config.php, no uploads, no paid parent theme, no database dumps.
+if command -v git >/dev/null 2>&1 && git -C "$root" rev-parse --git-dir >/dev/null 2>&1; then
+	git -C "$root" archive --format=zip -o "$out/miraex-code-$stamp.zip" HEAD
+	echo "code      -> miraex-code-$stamp.zip      ($(du -h "$out/miraex-code-$stamp.zip" | cut -f1), commit $(git -C "$root" rev-parse --short HEAD))"
+else
+	echo "code      -> skipped (no git here; the code is inside the content archive)"
+fi
+
 # ---- 3. the instructions, readable without unpacking anything -----------
 cp "$here/../DEPLOY.md" "$out/DEPLOY.md"
 echo "guide     -> DEPLOY.md"
 
 # ---- 4. what the receiving side has to know -----------------------------
 cat > "$out/README-first.txt" <<EOF
-Miraex handover — exported $stamp
+Miraex website handover — exported $stamp
 
-  miraex-db-$stamp.sql          full database (pages, templates, menu, CF7 form,
-                                 theme options, media records)
-  miraex-content-$stamp.tar.gz   wp-content/themes/betheme-child + wp-content/uploads
+Read DEPLOY.md in this folder first. Sections 1-4 are the ordered deploy path, and it
+opens with four failures that produce no error message — three of them look like
+success, so that is where to start if anything behaves oddly.
 
-Not included, install separately:
-  - WordPress core
-  - betheme (parent theme, paid — needs its own licence/purchase code)
-  - Contact Form 7 (the only plugin)
+FILES
 
-Read DEPLOY.md in this folder first — same file as
-wp-content/themes/betheme-child/docs/DEPLOY.md inside the tarball. Sections 1-4 are
-the ordered deploy path; it opens with the four failures that produce no error
-message, which is where to look first if something behaves oddly.
+  miraex-content-$stamp.tar.gz   Everything under wp-content the site needs:
+                                 themes/betheme (paid parent, v28.5.7),
+                                 themes/betheme-child (the code), plugins, uploads.
+                                 THIS is what you untar to deploy.
 
-The two that matter most:
-  1. Do NOT rewrite the domain (it is not changing). If it ever changes, never with
-     sed — the builder data is PHP-serialized with length-prefixed strings.
-  2. /privacy/ and /terms-of-service/ are DRAFTS pending legal review, with every
-     open point marked [TO CONFIRM: ...] in the visible page text. Not for public.
+  miraex-db-$stamp.sql           The database: pages, templates, nav menu, SEO
+                                 metadata, plugin settings, media records.
+
+  miraex-code-$stamp.zip         The hand-written code on its own, for reading and
+                                 review. Already present inside the content archive —
+                                 there is nothing extra to install from it.
+
+  DEPLOY.md                      The runbook.
+
+NOT INCLUDED
+
+  WordPress core. That is all — both themes and both plugins are in the archive.
+
+THE TWO THAT MATTER MOST
+
+  1. Do NOT rewrite the domain. It is not changing: the database already holds
+     https://miraex.com. If it ever changes, never with sed — the page builder data
+     is PHP-serialized with length-prefixed strings, and a text replace leaves pages
+     rendering completely blank with nothing in any log.
+
+  2. /privacy/ and /terms-of-service/ are DRAFTS pending legal review. Every open
+     point is marked [TO CONFIRM: ...] in the visible page text. Not for public.
+
+Keep this bundle private: it carries a paid theme, and the database dump carries user
+emails and password hashes.
 EOF
 
 echo
