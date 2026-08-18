@@ -22,22 +22,21 @@ three of them look like success.
 
 ## 1. What you are being given
 
-Two things:
+One zip: **`miraex-website.zip`** (31 MB). Unzip it and you get four things:
 
-1. **The repository** — `git@github.com:wisekeylab/miraex-wordpress.git`, branch `master`.
-   The hand-written half: the child theme, the contact endpoint and the scripts that
-   generate the pages. 95 files, 3 MB.
-2. **`miraex-handover-data.zip`** (28 MB), containing:
+```
+wp-content/        the whole folder the site needs — copy it into the WordPress
+                   directory, replacing the one a fresh install creates.
+                   Contains themes/betheme (paid parent, v28.5.7),
+                   themes/betheme-child (the code), both plugins, and all media.
+database.sql       import into an empty database. 20 tables.
+DEPLOY.md          this file.
+README-first.txt   the same thing in one screen, for whoever only wants the steps.
+```
 
-| File | Size | Contents |
-| --- | --- | --- |
-| `miraex-db-<stamp>.sql` | 8.3 MB | Pages, header/footer/mega-menu templates, 21 section templates, the nav menu, SEO metadata, plugin settings |
-| `miraex-content-<stamp>.tar.gz` | 28 MB | All of `wp-content` the site needs: `themes/betheme` (paid parent, v28.5.7), `themes/betheme-child`, `plugins`, `uploads` |
-| `DEPLOY.md` | — | This file |
-| `README-first.txt` | — | One-screen orientation |
-
-**Only WordPress core is not included.** Keep the archive private: it carries a paid theme,
-and the database carries user emails and password hashes.
+**Only WordPress core is missing.** Nothing to build, no scripts to run, no repository to
+clone. Keep the files private: `wp-content` carries a licensed paid theme, and
+`database.sql` carries user emails and password hashes.
 
 What the site is made of:
 
@@ -72,18 +71,15 @@ is ~15 GB. A traffic spike here is a **bandwidth** problem, not a CPU one, which
 
 Nothing else — both themes and both plugins are in the archive.
 
-### 2.3 Unpack the content
+### 2.3 Put `wp-content` in place
 
-```bash
-tar -xzf miraex-content-<stamp>.tar.gz -C /path/to/webroot
-```
-
-Gives `wp-content/themes/betheme`, `themes/betheme-child`, `plugins`, `uploads`.
+Copy the `wp-content` folder from the zip into the WordPress directory, replacing the one
+the fresh install created. It already contains both themes, both plugins and all media.
 
 ### 2.4 Create the database and import
 
 ```bash
-mysql -u <user> -p <db> < miraex-db-<stamp>.sql
+mysql -u <user> -p <db> < database.sql
 ```
 
 Empty database. RDS is fine — nothing depends on the database being local.
@@ -397,10 +393,6 @@ database dump has no business in a repository.
 git clone git@github.com:wisekeylab/miraex-wordpress.git
 ```
 
-To produce a fresh handover archive from a running install:
-
-```bash
-wp-content/themes/betheme-child/docs/build/export_site.sh [output-dir]
-```
-
-It reads the credentials out of `wp-config.php`, so it works unchanged against RDS.
+`docs/build/export_site.sh` regenerates a handover bundle from a running install; it reads
+the credentials out of `wp-config.php`, so it works unchanged against RDS. Nobody needs it
+to deploy — it is for whoever hands the site over next.
