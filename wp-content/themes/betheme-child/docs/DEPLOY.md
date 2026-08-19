@@ -1,6 +1,7 @@
 # Deploying miraex.com
 
-A runbook for standing this site up on AWS. Sections 1–4 are the ordered path; everything
+A runbook for standing this site up. Sections 1–4 are the ordered path — §2 is the deploy
+itself, §2b covers Coolify and moving to a different domain, §3 covers AWS. Everything
 after is the reasoning, which matters when something behaves oddly.
 
 Checked against the running site on 2026-08-17. The numbers in here are measured, not
@@ -154,6 +155,93 @@ by post ID; it survives the import unchanged, but regenerate anyway.
 
 In the HubSpot portal, before testing the form. Until the sending domain is registered
 HubSpot **accepts the submission with `200 OK` and discards it** — see §4.4.
+
+---
+
+## 2b. Coolify, and a different domain
+
+Coolify runs everything in Docker behind its own reverse proxy (Traefik or Caddy), which
+changes two things and makes a third — the domain change — the riskiest step in the whole
+deploy.
+
+### 2b.1 Create the service
+
+Use Coolify's WordPress + MariaDB/MySQL template. Set the **FQDN to the new domain** in the
+service settings; Coolify configures the proxy and requests the certificate. Point the DNS
+record at the Coolify host first, or the certificate cannot be issued.
+
+Give `wp-content` a **persistent volume**. Without one, every redeploy wipes the themes,
+the plugins and every uploaded image.
+
+### 2b.2 Put the files and the database in
+
+The container starts with a stock WordPress. Replace its `wp-content` and load the dump:
+
+```bash
+# from the machine holding the unzipped package
+docker cp wp-content/. <wordpress-container>:/var/www/html/wp-content/
+docker exec -i <database-container> mysql -u<user> -p<pass> <db> < database.sql
+```
+
+Coolify's own terminal, or SFTP into the volume, work just as well. Afterwards fix
+ownership so WordPress can write:
+
+```bash
+docker exec <wordpress-container> chown -R www-data:www-data /var/www/html/wp-content
+```
+
+### 2b.3 Change the domain — before opening the site
+
+The database still says `https://miraex.com`, so visiting the new domain would redirect
+straight back to the old site. Do the rewrite from the command line first:
+
+```bash
+docker exec <wordpress-container> php \
+  wp-content/themes/betheme-child/docs/build/search_replace.php \
+  https://miraex.com https://new-domain.com
+```
+
+That is a **dry run** — it prints what would change and writes nothing. Add `--apply` when
+the numbers look right.
+
+The script exists because this database cannot survive a text replace. Page content is
+stored as PHP-serialized arrays whose strings carry their own byte length
+(`s:66:"https://miraex.com/…"`); changing the text without the `66` makes `unserialize()`
+fail and BeBuilder renders the page blank with nothing in any log. The script unserializes
+each value, replaces inside it, serializes it back, and refuses to write anything that does
+not read back. No WP-CLI needed — Coolify's image will not have it.
+
+Measured on the current database: **39 rows change, 20 of them serialized.** It was tested
+by rewriting to a throwaway domain and back: all 75 serialized rows still unserialized, the
+front page still read as 8 sections, and the site came back byte for byte.
+
+Two things it deliberately leaves alone:
+
+- **`info@miraex.com`** and other addresses — it only matches the URL with its scheme, so
+  the contact email survives.
+- **`guid`** — WordPress documentation says never to change it, and nothing renders from it.
+  `--include-guid` overrides that if you insist.
+
+What it cannot decide for you: `/privacy/` and `/terms-of-service/` **name miraex.com in
+their prose**. If the site is permanently moving, someone has to edit that text.
+
+Afterwards: regenerate the BeTheme CSS (§2.9) and register the new domain in HubSpot
+(§2.10) — the form silently discards submissions from an unregistered domain.
+
+### 2b.4 Behind Coolify's proxy
+
+Both settings in §2.5 are **required**, for the same reasons as on AWS:
+
+- `HTTP_X_FORWARDED_PROTO` — Traefik and Caddy terminate TLS and speak HTTP to the
+  container, so without it WordPress sees a plain request while `siteurl` says https.
+- `MIRAEX_BEHIND_PROXY` — otherwise every visitor arrives as the proxy's container address,
+  they share one rate-limit bucket, and the eleventh contact message of the hour is refused.
+
+### 2b.5 Caching
+
+The WordPress image runs Apache or nginx, so LiteSpeed Cache does not cache pages (§3.4).
+Its minify and lazy-load still work. Either leave it for those, or deactivate it and put
+Cloudflare in front — which is the answer the load numbers point at anyway (§2.1).
 
 ---
 

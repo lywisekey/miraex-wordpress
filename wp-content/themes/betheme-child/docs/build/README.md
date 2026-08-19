@@ -41,6 +41,7 @@ docker exec laradock-workspace-1 php /tmp/<script>.php
 | — | `lib_hubspot.php` | The contact form: markup + styling + the browser-side POST to HubSpot. Required by `build_pages.php`; not run on its own. |
 | 15 | `install_litespeed.php` | Downloads and activates LiteSpeed Cache. |
 | 16 | `configure_litespeed.php` | Applies the cache and optimisation settings, with the reasoning for each in the file. List settings are stored as **arrays**, scalars as strings — writing the wrong shape leaves a setting that reads correctly in the database and is ignored by the plugin. |
+| — | `search_replace.php` | Changes the site's domain without WP-CLI, unserializing each value rather than replacing text inside it. Dry run by default; refuses to write anything that will not unserialize. Needed for any move to a different domain. |
 | — | `verify_layout.py` | Measures a deployed site against the numbers the design was built to — 36 assertions, exits non-zero on failure. Takes a base URL, so it works against staging or the new domain. |
 | — | `dump_sections.php` | Dev helper: lists every section on every page with its title, wrap/item counts and element types. This is how the section library was inventoried. |
 | — | `export_site.php`/`export_site.sh` | Packages the database and `wp-content` for handover — see `../DEPLOY.md`. |

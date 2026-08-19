@@ -44,7 +44,12 @@
       "Bash(find /Volumes/Hawk/workspace/wisekey /private/tmp/claude-501 -name \"import_clients.php\" -o -name \"import_svg.php\" 2>/dev/null | head)",
       "Read(//Volumes/Hawk/workspace/wisekey/**)",
       "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --ignore-certificate-errors --window-size=414,2000 --screenshot=mob_final.png --virtual-time-budget=8000 https://miraex.com/)",
-      "Bash(sips -c 1300 1440 --cropOffset 5100 0 f2.png)"
+      "Bash(sips -c 1300 1440 --cropOffset 5100 0 f2.png)",
+      "Bash(curl -sk -D - -o /dev/null https://miraex.com/contact/)",
+      "Bash(dig +short miraex.com)",
+      "Bash(curl -sk https://miraex.com/)",
+      "Bash(curl -sk -o /dev/null -w \"  server: %{http_code}\\\\n\" https://miraex.com/)",
+      "Bash(curl -sk -D - -o /dev/null https://miraex.com/)"
     ],
     "additionalDirectories": [
       "/Volumes/Hawk/workspace/wisekey/wordpress/miraex.com/code/wp-content/themes/betheme/functions/builder"
