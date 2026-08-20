@@ -228,6 +228,28 @@ their prose**. If the site is permanently moving, someone has to edit that text.
 Afterwards: regenerate the BeTheme CSS (§2.9) and register the new domain in HubSpot
 (§2.10) — the form silently discards submissions from an unregistered domain.
 
+### 2b.3b If the import fails: `Unknown collation`
+
+```
+ERROR 1273 (HY000) at line N: Unknown collation: 'utf8mb4_unicode_520_ci'
+```
+
+The dump comes from MySQL 8, which uses that collation; **MariaDB does not have it**, and
+Coolify's WordPress template ships MariaDB. Nothing is wrong with the dump — the two
+servers disagree about a name.
+
+```bash
+sed -i 's/utf8mb4_unicode_520_ci/utf8mb4_unicode_ci/g' database.sql
+```
+
+`utf8mb4_unicode_ci` exists on both, so the result imports anywhere. It appears only in the
+`CREATE TABLE` lines — 84 of them, and zero inside any `INSERT` — so the replace cannot
+reach the data. This one is safe for `sed`; the domain rewrite in §2b.3 is not, and the
+difference is that one touches DDL and the other touches serialized values.
+
+Checked by importing the converted dump into an empty database: 20 tables, 15 published
+pages, and the front page's builder data still unserialized to 8 sections.
+
 ### 2b.4 Behind Coolify's proxy
 
 Both settings in §2.5 are **required**, for the same reasons as on AWS:
