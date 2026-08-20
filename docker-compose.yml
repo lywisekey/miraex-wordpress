@@ -1,0 +1,63 @@
+# Coolify: New Resource -> Docker Compose -> this repository.
+#
+# The database imports itself on first start and the site comes up complete. There is
+# nothing to copy in and no command to run afterwards.
+
+services:
+
+  wordpress:
+    build: .
+    restart: unless-stopped
+    environment:
+      # Coolify replaces this with the domain set in the UI and points its proxy here.
+      SERVICE_FQDN_WORDPRESS_80: /
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-miraex}
+      WORDPRESS_DB_USER: ${MYSQL_USER:-miraex}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      # Written into wp-config.php by the stock entrypoint. Editing the file directly
+      # would not survive a restart — the image rewrites it every time.
+      WORDPRESS_CONFIG_EXTRA: |
+        /* Coolify's proxy terminates TLS and speaks HTTP to this container. Without
+           this WordPress sees a plain request while siteurl says https, and every
+           page redirects in a loop. */
+        if ( isset( $$_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $$_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+            $$_SERVER['HTTPS'] = 'on';
+        }
+        /* Every request arrives from the proxy. Without this the contact form's rate
+           limit buckets the whole internet together and refuses the eleventh message
+           of the hour from anybody. */
+        define( 'MIRAEX_BEHIND_PROXY', true );
+        define( 'FS_METHOD', 'direct' );
+    volumes:
+      # Media only. Themes and plugins come from the image on purpose, so a redeploy
+      # cannot leave a half-updated site behind.
+      - miraex-uploads:/var/www/html/wp-content/uploads
+    ports:
+      - "8088:80"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  mariadb:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${MYSQL_DATABASE:-miraex}
+      MARIADB_USER: ${MYSQL_USER:-miraex}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - miraex-db:/var/lib/mysql
+      # MariaDB runs everything in here the first time it initialises an empty data
+      # directory — and only then. This is what removes the manual import.
+      - ./database.sql.gz:/docker-entrypoint-initdb.d/10-miraex.sql.gz:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  miraex-uploads:
+  miraex-db:

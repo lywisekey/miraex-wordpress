@@ -1,0 +1,110 @@
+{
+    "assets/img/miraex-logo-full.png": {
+        "id": 5,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/miraex-logo-full.png",
+        "status": "imported"
+    },
+    "assets/img/miraex-logo.png": {
+        "id": 6,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/miraex-logo.png",
+        "status": "imported"
+    },
+    "assets/img/favicon.png": {
+        "id": 7,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/favicon.png",
+        "status": "imported"
+    },
+    "assets/img/hero-photonics.jpg": {
+        "id": 8,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/hero-photonics.jpg",
+        "status": "imported"
+    },
+    "assets/img/photon-journey.jpg": {
+        "id": 9,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/photon-journey.jpg",
+        "status": "imported"
+    },
+    "assets/img/orbital-qkd.jpg": {
+        "id": 10,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/orbital-qkd.jpg",
+        "status": "imported"
+    },
+    "assets/img/cleanroom.jpg": {
+        "id": 11,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/cleanroom.jpg",
+        "status": "imported"
+    },
+    "assets/img/cryostat.jpg": {
+        "id": 12,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/cryostat.jpg",
+        "status": "imported"
+    },
+    "assets/img/logos/epfl.png": {
+        "id": 13,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/epfl.png",
+        "status": "imported"
+    },
+    "assets/img/logos/innosuisse.png": {
+        "id": 14,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/innosuisse.png",
+        "status": "imported"
+    },
+    "assets/img/logos/innovaud.png": {
+        "id": 15,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/innovaud.png",
+        "status": "imported"
+    },
+    "assets/img/logos/esa-bic.png": {
+        "id": 16,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/esa-bic.png",
+        "status": "imported"
+    },
+    "assets/img/logos/ibm-q-network.png": {
+        "id": 17,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/ibm-q-network.png",
+        "status": "imported"
+    },
+    "assets/img/logos/venture-kick.png": {
+        "id": 18,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/venture-kick.png",
+        "status": "imported"
+    },
+    "assets/img/logos/venturelab.png": {
+        "id": 19,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/venturelab.png",
+        "status": "imported"
+    },
+    "assets/img/logos/fit.png": {
+        "id": 20,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/fit.png",
+        "status": "imported"
+    },
+    "assets/img/logos/swiss-pic.png": {
+        "id": 21,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/swiss-pic.png",
+        "status": "imported"
+    },
+    "assets/img/logos/swissnex.png": {
+        "id": 22,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/swissnex-scaled.png",
+        "status": "imported"
+    },
+    "assets/img/logos/imd.svg": {
+        "error": "Sorry, you are not allowed to upload this file type."
+    },
+    "assets/img/logos/epic.png": {
+        "id": 23,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/epic.png",
+        "status": "imported"
+    },
+    "assets/img/logos/top100-swiss-startup.png": {
+        "id": 24,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/top100-swiss-startup.png",
+        "status": "imported"
+    },
+    "assets/img/logos/creative-destruction-lab.png": {
+        "id": 25,
+        "url": "https://miraex.com/wp-content/uploads/2026/08/creative-destruction-lab.png",
+        "status": "imported"
+    }
+}

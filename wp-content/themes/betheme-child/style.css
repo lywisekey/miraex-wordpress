@@ -1,0 +1,25 @@
+/*
+Theme Name: Betheme Child
+Theme URI: https://themes.muffingroup.com/betheme
+Author: Muffin group
+Author URI: https://muffingroup.com
+Description: Child Theme for Betheme with the Miraex quantum website content layer.
+Template: betheme
+Version: 2.1.0
+Text Domain: betheme-child
+*/
+
+/*
+ * Miraex styles live in assets/miraex/css/miraex.css and are scoped to
+ * .miraex-page. Header/Footer are intentionally left to BeTheme Builder.
+ */
+
+/*
+ * BeTheme's page.php always prints an empty
+ *   <section class="section section-page-footer">
+ * to host wp_link_pages(). No Miraex page uses <!--nextpage-->, so it renders as
+ * dead space between the last builder section and the footer — 256px on the front
+ * page, where miraex.css's `.section` padding also applies to it.
+ * Hide it only when there is genuinely no pager, so paginated content still works.
+ */
+.section-page-footer:not(:has(.pager-single)) { display: none; }
